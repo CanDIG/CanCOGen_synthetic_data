@@ -6,11 +6,11 @@ The CRF json is based on CanCOGen CRF excel.
 
 **Usage:**
 
-- Generate a list of CanCOGEN CRFs in json:
+- Generate a list of CanCOGen CRFs in json:
 
 <pre>python generator.py [--number_of_patients=100 --filename=output]</pre>
 
 
-- Convert a list of CanCOGEN CRFs to a list of Phenopackets
+- Convert a list of CanCOGen CRFs to a list of Phenopackets
 
 <pre>python converter.py --input_file=cancogen_crf.json [--output_filename=output]</pre>
