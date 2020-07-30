@@ -1,0 +1,70 @@
+{
+  "project": "997d99c8-06b9-4d1c-ad84-4104c3caa601",
+  "privacy": "Open access",
+  "licenses": [
+    {
+      "name": "BY-NC-SA"
+    }
+  ],
+  "creators": [
+    {
+      "name": "C3G"
+    }
+  ],
+  "types": [
+    {
+      "information": {
+        "value": "genomics"
+      }
+    }
+  ],
+  "title": "CanCOGen synthetic dataset",
+  "description": "CanCOGen synthetic dataset derived from the CRF.",
+  "storedIn": {
+    "name": "C3G"
+  },
+  "isAbout": [
+    {
+      "identifier": {
+        "identifier": "9606",
+        "identifierSource": "https://www.ncbi.nlm.nih.gov/taxonomy/9606"
+      },
+      "name": "Homo sapiens"
+    }
+  ],
+  "dates": [
+    {
+      "type": {
+        "value": "Metadata creation date"
+      },
+      "date": "2019-07-30 13:16:33"
+    }
+  ],
+  "extraProperties": [
+    {
+      "category": "contact",
+      "values": [
+        {
+          "value": "C3G"
+        }
+      ]
+    }
+  ],
+  "data_use": {
+    "consent_code": {
+      "primary_category": {
+        "code": "GRU"
+      },
+      "secondary_categories": [
+        {
+          "code": "RU"
+        }
+      ]
+    },
+    "data_use_requirements": [
+      {
+        "code": "COL"
+      }
+    ]
+  }
+}
