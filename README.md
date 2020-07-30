@@ -13,4 +13,4 @@ The CRF json is based on CanCOGen CRF excel.
 
 - Convert a list of CanCOGEN CRFs to a list of Phenopackets
 
-<pre>python generator.py --input_file=cancogen_crf.json [--output_filename=output]</pre>
+<pre>python converter.py --input_file=cancogen_crf.json [--output_filename=output]</pre>
