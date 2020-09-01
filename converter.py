@@ -8,7 +8,7 @@ from ontologies import ONTOLOGIES
 
 DIR_FILES = os.path.dirname(os.path.realpath(__file__))
 
-GENDER_TO_SEX_MAPPING = {
+SEX_TO_SEX_MAPPING = {
     "Male": "MALE",
     "Female": "FEMALE",
     "Not Specified": "UNKNOWN_SEX"
@@ -65,10 +65,10 @@ def convert_to_phenopacket(obj):
     symptoms = []
     if "demographics" in obj:
         subject["date_of_birth"] = obj["demographics"].get("age", None)
-        gender = obj["demographics"].get("gender", None)
-        if gender:
-            subject["sex"] = GENDER_TO_SEX_MAPPING[gender]
-        subject["ethnicity"] = obj["demographics"].get("race_or_ethnicity", None)
+        sex = obj["demographics"].get("sex", None)
+        if sex:
+            subject["sex"] = SEX_TO_SEX_MAPPING[sex]
+        subject["ethnicity"] = obj["demographics"].get("ancestry", None)
         subject["extra_properties"] = {
             "height": obj["demographics"].get("height", None),
             "weight": obj["demographics"].get("weight", None),

@@ -36,11 +36,15 @@ def generate_cancogen_data():
         },
         "demographics": {
             "age": str(fake.date_of_birth(minimum_age=20, maximum_age=100)),
-            "gender": random_choice_cv("demographics", "gender"),
-            "race_or_ethnicity": random_choice_cv("demographics", "race_or_ethnicity"),
-            "height": str(random.randrange(150, 190)),
-            "weight": str(random.randrange(50, 190)),
-            "education": random_choice_cv("demographics", "education")
+            "sex": random_choice_cv("demographics", "sex"),
+            "ancestry": random_choice_cv("demographics", "ancestry"),
+            "country_of_birth": "",
+            "height": f"{str(random.randrange(150, 190))} cm",
+            "weight": f"{str(random.randrange(50, 190))} Kg",
+            "education": random_choice_cv("demographics", "education"),
+            "employment": random_choice_cv("demographics", "employment"),
+            "household": "",
+            "pregnancy_weeks": ""
         },
         "vital_status": {
             "ambulatory": random_choice_cv("vital_status", "ambulatory")
@@ -92,7 +96,7 @@ def generate_cancogen_data():
             },
             "cancer": {
                 "malignancy": random_choice_generic("yes_no_dontknow"),
-                "age_at_diagnosis_with_cancer": random_choice_generic("yes_no_dontknow"),
+                "age_at_diagnosis_with_cancer": "",
                 "leukemia": random_choice_generic("yes_no_dontknow"),
                 "lymphoma": random_choice_generic("yes_no_dontknow"),
                 "sarcoma": random_choice_generic("yes_no_dontknow"),
@@ -100,7 +104,7 @@ def generate_cancogen_data():
                 "myeloma": random_choice_generic("yes_no_dontknow"),
                 "mixed_types": random_choice_generic("yes_no_dontknow"),
                 "location": "",
-                "cancer_treatment_in_last_twelve_months": []
+                "cancer_treatment_in_last_twelve_months": ""
             }
         },
         "symptoms_at_admission_longitudinal": {
@@ -213,6 +217,11 @@ def generate_cancogen_data():
         data["comorbidities"]["immune_system"]["type_of_organ_transplant"] = random.choice(
             DATA_DICTIONARY["comorbidities"]["immune_system"]["type_of_organ_transplant"]
         )[1]
+    # if malignancy is No, set all cancer diseases to No
+    if data["comorbidities"]["cancer"]["malignancy"] == "No":
+        for c in ["leukemia", "lymphoma", "sarcoma", "carcinoma", "myeloma", "mixed_types"]:
+            data["comorbidities"]["cancer"][c] = "No"
+
     # add type of bacteria location only if bacteria answer is Yes confirmed
     if data["pathogen_testing"]["bacteria"] != "No":
         data["pathogen_testing"]["bacteria_location"] = random_choice_cv("pathogen_testing", "bacteria_location")

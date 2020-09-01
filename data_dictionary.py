@@ -6,8 +6,8 @@ DATA_DICTIONARY = {
     "yes_no_na": [(0, "No"), (1, "Yes"), (-1, "NA")],
     "yes_no_confirmed_probable": [(0, "No"), (1, "Yes, confirmed"), (2, "Yes, probable")],
     "demographics": {
-        "gender": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
-        "race_or_ethnicity": [
+        "sex": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
+        "ancestry": [
             (0, "White"),
             (1, "Black"),
             (2, "Hispanic"),
@@ -24,6 +24,15 @@ DATA_DICTIONARY = {
             (3, "Bachelor's degree/4 year college"),
             (4, "Master's degree or higher"),
             (-1, "Don't know")
+        ],
+        "employment": [
+            (0, "Unknown"),
+            (1, "Healthcare worker (excluding long-term health care provider)"),
+            (2, "Factory worker"),
+            (3, "Long-term care facility employee"),
+            (4, "Grocery store employee"),
+            (5, "Tourism/travel worker"),
+            (6, "Other")
         ]
     },
     "vital_status": {
