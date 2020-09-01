@@ -4,6 +4,7 @@ DATA_DICTIONARY = {
     "yes_no": [(0, "No"), (1, "Yes")],
     "yes_no_dontknow": [(0, "No"), (1, "Yes"), (-1, "Don't know")],
     "yes_no_na": [(0, "No"), (1, "Yes"), (-1, "NA")],
+    "yes_no_unknown": [(0, "No"), (1, "Yes"), (-1, "Unknown")],
     "yes_no_confirmed_probable": [(0, "No"), (1, "Yes, confirmed"), (2, "Yes, probable")],
     "demographics": {
         "sex": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
@@ -119,7 +120,7 @@ DATA_DICTIONARY = {
             (2, "Yes, with sputum production"),
             (3, "Yes, bloody sputum/haemoptysis")
         ],
-        "difficulty_or_pain_with_breathing": [
+        "difficulty_breathing": [
             (0, "No"),
             (1, "Yes, slight"),
             (2, "Yes, moderate"),
@@ -146,8 +147,34 @@ DATA_DICTIONARY = {
             (5, "Other (specify)")
         ]
     },
-    "hospitalization_information_encounter_complications": {
-        "repeat_hospital_visit_within_30_days": [(0, "No"), (1, "Yes"), (2, "Unknown")]
+    "complications": {
+        "acute_respiratory_distress_syndrome": [
+            (0, "No"),
+            (1, "Yes, Mild"),
+            (2, "Yes, Moderate"),
+            (3, "Yes, Severe"),
+            (4, "Yes, Unknown"),
+            (-1, "N/A")
+        ],
+        "cardiac_inflammation": [
+            (-1, "N/A"),
+            (0, "Endocarditis"),
+            (1, "Myocarditis"),
+            (2, "Pericarditis")
+        ],
+        "cardiac_arrhythmia": [
+            (-1, "N/A"),
+            (1, "AF"),
+            (2, "VT/VF"),
+            (3, "Other")
+        ],
+        "cardiac_ischaemia": [
+            (-1, "N/A"),
+            (1, "STEMI"),
+            (2, "NSTEMI"),
+            (3, "Cath"),
+            (4, "Stent")
+        ]
     },
     "pathogen_testing": {
         "was_other_pathogen_testing_done_during_this_illness_episode": [

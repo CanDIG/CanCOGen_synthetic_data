@@ -49,6 +49,22 @@ def convert_to_phenopacket(obj):
                     "id": "HP:2020-06-08",
                     "iri_prefix": "https://hpo.jax.org/app/browse/term/",
                     "url": "http://purl.obolibrary.org/obo/hp.owl"
+                },
+                {
+                    "name": "Mammalian Phenotype Ontology",
+                    "version": "2020-07-09",
+                    "namespace_prefix": "MP",
+                    "id": "MP:2020-07-09",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/MP/",
+                    "url": "http://purl.obolibrary.org/obo/mp.owl"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2020-08-31",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2020-08-31",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/NCIT/",
+                    "url": "https://bioportal.bioontology.org/ontologies/NCIT"
                 }
             ]
         }

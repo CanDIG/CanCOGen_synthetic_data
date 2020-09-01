@@ -100,7 +100,7 @@ ONTOLOGIES = {
             "label": "Wet cough",
             "id": "HP:0031245"
         },
-        "difficulty_or_pain_with_breathing": {
+        "difficulty_breathing": {
             "label": "Difficulty breathing",
             "id": "HP:0002098"
         },
@@ -194,7 +194,7 @@ ONTOLOGIES = {
             "label": "Bodily pain",
             "id": "NCIT:C114901"
         },
-        "irritability_or_confusion": {
+        "altered_consciousness_or_confusion": {
             "label": "Confusion",
             "id": "HP:0001289"
         },
@@ -217,6 +217,120 @@ ONTOLOGIES = {
         "asymptomatic": {
             "label": "Asymptomatic",
             "id": "SNOMED:84387000"
+        }
+    },
+    "complications": {
+        "viral_pneumonitis": {
+            "label": "Pneumonitis",
+            "id": "SNOMED:205237003"
+        },
+        "bacterial_pneumonia": {
+            "label": "Bacterial pneumonia",
+            "id": "SNOMED:53084003"
+        },
+        "acute_respiratory_distress_syndrome": {
+            "label": "Acute respiratory distress syndrome",
+            "id": "SNOMED:67782005"
+        },
+        "pneumothorax": {
+            "label": "Pneumothorax",
+            "id": "HP:0002107"
+        },
+        "pleural_effusion": {
+            "label": "Pleural effusion",
+            "id": "HP:0002202"
+        },
+        "cryptogenic_organizing_pneumonia": {
+            "label": "Cryptogenic organizing pneumonia",
+            "id": "HP:0011945"
+        },
+        "bronchiolitis": {
+            "label": "Bronchiolitis",
+            "id": "HP:0011950"
+        },
+        "meningitis": {
+            "label": "Meningitis",
+            "id": "HP:0001287"
+        },
+        "encephalitis": {
+            "label": "Encephalitis",
+            "id": "HP:0002383"
+        },
+        "seizure": {
+            "label": "Seizure",
+            "id": "HP:0001250"
+        },
+        "stroke_cerebrovascular_accident": {
+            "label": "Stroke",
+            "id": "HP:0001297"
+        },
+        "congestive_heart_failure": {
+            "label": "Congestive heart failure",
+            "id": "HP:0001635"
+        },
+        "cardiac_inflammation": {
+            "label": "cardiac inflammation",
+            "id": "MP:0001853"
+        },
+        "cardiac_arrhythmia": {
+            "label": "Cardiac arrhythmia",
+            "id": "SNOMED:698247007"
+        },
+        "cardiac_ischaemia": {
+            "label": "cardiac ischemia",
+            "id": "MP:0004120"
+        },
+        "cardiac_arrest": {
+            "label": "Cardiac arrest",
+            "id": "HP:0001695"
+        },
+        "coagulation_disorder": {
+            "label": "Coagulation disorder",
+            "id": "SNOMED:64779008"
+        },
+        "disseminated_intravascular_coagination": {
+            "label": "Disseminated intravascular coagulation",
+            "id": "HP:0005521"
+        },
+        "anemia": {
+            "label": "Anemia",
+            "id": "HP:0001903"
+        },
+        "rhabdomyolysis": {
+            "label": "Rhabdomyolysis",
+            "id": "HP:0003201"
+        },
+        "myositis": {
+            "label": "Myositis",
+            "id": "HP:0100614"
+        },
+        "acute_renal_injury": {
+            "label": "Acute Renal Failure",
+            "id": "NCIT:C26808"
+        },
+        "gastrointestinal_haemorrhage": {
+            "label": "Gastrointestinal hemorrhage",
+            "id": "HP:0002239"
+        },
+        "pancreatitis": {
+            "label": "Pancreatitis",
+            "id": "HP:0001733"
+        },
+        "liver_dysfunction": {
+            "label": "Liver dysfunction",
+            "id": "HP:0001410"
+        },
+        "hyperglycemia": {
+            "label": "Hyperglycemia",
+            "id": "HP:0003074"
+        },
+        "hypoglycemia": {
+            "label": "Hypoglycemia",
+            "id": "HP:0001943"
+        },
+        "inflammatory_syndrome": {
+            "label": "Systemic inflammatory response syndrome",
+            "id": "SNOMED:238149007"
         }
     }
 
