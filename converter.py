@@ -62,6 +62,7 @@ def convert_to_phenopacket(obj):
     }
     diseases = []
     phenotypic_features = []
+    symptoms = []
     if "demographics" in obj:
         subject["date_of_birth"] = obj["demographics"].get("age", None)
         gender = obj["demographics"].get("gender", None)
@@ -115,7 +116,7 @@ def convert_to_phenopacket(obj):
             if "asthma" in obj["comorbidities"]["respiratory_system"]:
                 if obj["comorbidities"]["respiratory_system"]["asthma"] == "Yes":
                     disease = {
-                        "term":  ONTOLOGIES["comorbidities"]["asthma"],
+                        "term": ONTOLOGIES["comorbidities"]["asthma"],
                         "extra_properties": {
                             "comorbidities_group": "respiratory_system"
                         }
@@ -280,6 +281,22 @@ def convert_to_phenopacket(obj):
                         }
                     }
                     diseases.append(disease)
+    # TODO
+    if "symptoms_at_admission_longitudinal" in obj:
+        if "dry_cough" in obj["symptoms_at_admission_longitudinal"]:
+            symptom = {
+                "type": ONTOLOGIES["symptoms"]["dry_cough"],
+                "extra_properties": {
+                    "datatype": "symptoms"
+                }
+            }
+            if "Yes" in obj["symptoms_at_admission_longitudinal"]["dry_cough"]:
+                symptom["negated"] = False
+                symptom["description"] = obj["symptoms_at_admission_longitudinal"]["dry_cough"]
+            else:
+                symptom["negated"] = True
+                symptom["description"] = "The phenotype was looked for, but found to be absent."
+            phenotypic_features.append(symptom)
     phenopacket["subject"] = subject
     phenopacket["diseases"] = diseases
     phenopacket["phenotypic_features"] = phenotypic_features
@@ -303,7 +320,6 @@ def convert_bundle(input_filename, output_filename):
 
 
 def main(argv):
-
     opts, args = getopt.getopt(argv, "", ["input_file=", "output_filename="])
     input_file = ''
     output_filename = 'phenopackets_output'
@@ -328,5 +344,3 @@ def help():
 
 if __name__ == "__main__":
     main(argv[1:])
-
-

@@ -90,5 +90,134 @@ ONTOLOGIES = {
             "label": "Multiple myeloma",
             "id": "SNOMED:109989006"
         }
+    },
+    "symptoms": {
+        "dry_cough": {
+            "label": "Dry cough",
+            "id": "HP:0031246"
+        },
+        "mucus_cough": {
+            "label": "Wet cough",
+            "id": "HP:0031245"
+        },
+        "difficulty_or_pain_with_breathing": {
+            "label": "Difficulty breathing",
+            "id": "HP:0002098"
+        },
+        "fever": {
+            "label": "Fever",
+            "id": "HP:0001945"
+        },
+        "heart_rate": {
+            "label": "Heart rate",
+            "id": "SNOMED:364075005"
+        },
+        "highest_respiratory_rate": {
+            "label": "Respiratory rate",
+            "id": "SNOMED:86290005"
+        },
+        "wheezing": {
+            "label": "Wheezing",
+            "id": "HP:0030828"
+        },
+        "pulse": {
+            "label": "Pulse",
+            "id": "SNOMED:8499008"
+        },
+        "systolic_blood_pressure": {
+            "label": "Systolic blood pressure",
+            "id": "SNOMED:271649006"
+        },
+        "diastolic_blood_pressure": {
+            "label": "Diastolic blood pressure",
+            "id": "SNOMED:271650006"
+        },
+        "oxygen_saturation": {
+            "label": "Finding of oxygen saturation",
+            "id": "SNOMED:447755005"
+        },
+        "fatigue": {
+            "label": "Fatigue",
+            "id": "HP:0012378"
+        },
+        "chest_pain": {
+            "label": "Chest pain",
+            "id": "HP:0100749"
+        },
+        "ear_pain": {
+            "label": "Ear pain",
+            "id": "HP:0030766"
+        },
+        "joint_pain": {
+            "label": "Joint pain/Joint inflammation",
+            "id": "HP:0005059"
+        },
+        "abdominal_pain": {
+            "label": "Abdominal pain",
+            "id": "HP:0002027"
+        },
+        "runny_nose": {
+            "label": "Runny nose",
+            "id": "HP:0031417"
+        },
+        "nosebleed": {
+            "label": "Nosebleed",
+            "id": "HP:0000421"
+        },
+        "sore_throat": {
+            "label": "Sore throat symptom",
+            "id": "SNOMED:267102003"
+        },
+        "loss_of_taste_or_smell": {
+            "loss_of_taste": {
+                "label": "Loss of taste",
+                "id": "SNOMED:36955009"
+            },
+            "loss_of_smell": {
+                "label": "C/O - loss of smell sense",
+                "id": "SNOMED:272028008"
+            }
+        },
+        "diarrhea": {
+            "label": "Diarrhea",
+            "id": "HP:0002014"
+        },
+        "nausea": {
+            "label": "Nausea",
+            "id": "HP:0002018"
+        },
+        "headache": {
+            "label": "Headache",
+            "id": "HP:0002315"
+        },
+        "bodily_pain": {
+            "label": "Bodily pain",
+            "id": "NCIT:C114901"
+        },
+        "irritability_or_confusion": {
+            "label": "Confusion",
+            "id": "HP:0001289"
+        },
+        "skin_rash": {
+            "label": "Skin rash",
+            "id": "HP:0000988"
+        },
+        "myalgia": {
+            "label": "Myalgia",
+            "id": "HP:0003326"
+        },
+        "seizures": {
+            "label": "Seizures",
+            "id": "HP:0001250"
+        },
+        "conjunctivitis": {
+            "label": "Conjunctivitis",
+            "id": "HP:0000509"
+        },
+        "asymptomatic": {
+            "label": "Asymptomatic",
+            "id": "SNOMED:84387000"
+        }
     }
+
 }

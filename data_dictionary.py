@@ -57,17 +57,17 @@ DATA_DICTIONARY = {
     "comorbidities": {
         "immune_system": {
             "type_of_organ_transplant": [
-            (1, "Heart"),
-            (2, "Kidney"),
-            (3, "Liver"),
-            (4, "Pancreas"),
-            (5, "Intestine"),
-            (6, "Lung"),
-            (7, "Eye (Cornea)"),
-            (8, "Blood/bone marrow"),
-            (9, "Blood vessel"),
-            (10, "Other")
-        ]
+                (1, "Heart"),
+                (2, "Kidney"),
+                (3, "Liver"),
+                (4, "Pancreas"),
+                (5, "Intestine"),
+                (6, "Lung"),
+                (7, "Eye (Cornea)"),
+                (8, "Blood/bone marrow"),
+                (9, "Blood vessel"),
+                (10, "Other")
+            ]
         },
         "cancer": {
             "location": [
@@ -116,6 +116,11 @@ DATA_DICTIONARY = {
             (2, "Yes, moderate"),
             (3, "Yes, severe"),
             (4, "Don't know")
+        ],
+        "oxygen_saturation_on": [
+            (1, "Room air"),
+            (2, "Oxygen therapy"),
+            (3, "N/A")
         ],
         "loss_of_taste_or_smell": [
             (0, "No"),
