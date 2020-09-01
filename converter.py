@@ -51,6 +51,23 @@ def comorbidity_to_disease(obj, comorbidity, comorbidities_group):
             return None
 
 
+def loss_to_pf(type_of_loss, value, negated=False):
+    loss = {
+        "type": ONTOLOGIES["symptoms"]["loss_of_taste_or_smell"][type_of_loss],
+        "extra_properties": {
+            "datatype": "symptom"
+        },
+        "description": f"{value} - Original value extracted from the source CRF.",
+        "negated": False
+    }
+    if negated:
+        loss["negated"] = True
+        loss["description"] = f"{value} - " \
+                              f"Original value extracted from the source CRF." \
+                              f"The phenotype was looked for, but found to be absent."
+    return loss
+
+
 def convert_to_phenopacket(obj):
     """ Takes single CanCoGen json crf object and converts it to a phenopacket. """
 
@@ -120,6 +137,29 @@ def convert_to_phenopacket(obj):
             phenotypic_features.append(new_value_pf)
 
         # TODO loss_of_taste_or_smell
+        if "loss_of_taste_or_smell" in obj["symptoms_at_admission_longitudinal"]:
+            loss_of_taste_or_smell = obj["symptoms_at_admission_longitudinal"]["loss_of_taste_or_smell"]
+
+            if loss_of_taste_or_smell == "Only smell":
+                phenotypic_features.extend([
+                    loss_to_pf("loss_of_smell", loss_of_taste_or_smell, False),
+                    loss_to_pf("loss_of_taste", loss_of_taste_or_smell, True)
+                ])
+            elif loss_of_taste_or_smell == "Only taste":
+                phenotypic_features.extend([
+                    loss_to_pf("loss_of_taste", loss_of_taste_or_smell, False),
+                    loss_to_pf("loss_of_smell", loss_of_taste_or_smell, True)
+                ])
+            elif loss_of_taste_or_smell == "Both smell and taste":
+                phenotypic_features.extend([
+                    loss_to_pf("loss_of_smell", loss_of_taste_or_smell, False),
+                    loss_to_pf("loss_of_taste", loss_of_taste_or_smell, False)
+                ])
+            else:
+                phenotypic_features.extend([
+                    loss_to_pf("loss_of_smell", loss_of_taste_or_smell, True),
+                    loss_to_pf("loss_of_taste", loss_of_taste_or_smell, True)
+                ])
 
     phenopacket["subject"] = subject
     phenopacket["diseases"] = diseases
