@@ -15,6 +15,42 @@ SEX_TO_SEX_MAPPING = {
 }
 
 
+def symptom_to_pf(obj, symptom, contains_value=False):
+    if symptom in obj:
+        pf = {
+            "type": ONTOLOGIES["symptoms"][symptom],
+            "extra_properties": {
+                "datatype": "symptom"
+            }
+        }
+        if "Yes" in obj[symptom]:
+            pf["negated"] = False
+            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF."
+        elif contains_value:
+            pf["negated"] = False
+            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF."
+        else:
+            pf["negated"] = True
+            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF." \
+                                f"The phenotype was looked for, but found to be absent."
+        return pf
+
+
+def comorbidity_to_disease(obj, comorbidity, comorbidities_group):
+    if comorbidity in obj:
+        if obj[comorbidity] == "Yes":
+            disease = {
+                "term": ONTOLOGIES["comorbidities"][comorbidities_group][comorbidity],
+                "extra_properties": {
+                    "comorbidities_group": comorbidities_group.replace('_', ' '),
+                    "datatype": "comorbidity"
+                }
+            }
+            return disease
+        else:
+            return None
+
+
 def convert_to_phenopacket(obj):
     """ Takes single CanCoGen json crf object and converts it to a phenopacket. """
 
@@ -43,7 +79,7 @@ def convert_to_phenopacket(obj):
     }
     diseases = []
     phenotypic_features = []
-    symptoms = []
+    # Demographics
     if "demographics" in obj:
         subject["date_of_birth"] = obj["demographics"].get("age", None)
         sex = obj["demographics"].get("sex", None)
@@ -55,229 +91,36 @@ def convert_to_phenopacket(obj):
             "weight": obj["demographics"].get("weight", None),
             "education": obj["demographics"].get("education", None)
         }
+    # Comorbidities
     if "comorbidities" in obj:
-        if "immune_system" in obj["comorbidities"]:
-            if "hiv" in obj["comorbidities"]["immune_system"]:
-                if obj["comorbidities"]["immune_system"]["hiv"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["hiv"],
-                        "extra_properties": {
-                            "comorbidities_group": "immune_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "autoimmune_or_rheumatologic_disease" in obj["comorbidities"]["immune_system"]:
-                if obj["comorbidities"]["immune_system"]["autoimmune_or_rheumatologic_disease"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["autoimmune_or_rheumatologic_disease"],
-                        "extra_properties": {
-                            "comorbidities_group": "immune_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "type_one_diabetes" in obj["comorbidities"]["immune_system"]:
-                if obj["comorbidities"]["immune_system"]["type_one_diabetes"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["type_one_diabetes"],
-                        "extra_properties": {
-                            "comorbidities_group": "immune_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "type_two_diabetes" in obj["comorbidities"]["immune_system"]:
-                if obj["comorbidities"]["immune_system"]["type_two_diabetes"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["type_two_diabetes"],
-                        "extra_properties": {
-                            "comorbidities_group": "immune_system"
-                        }
-                    }
-                    diseases.append(disease)
-        if "respiratory_system" in obj["comorbidities"]:
-            if "asthma" in obj["comorbidities"]["respiratory_system"]:
-                if obj["comorbidities"]["respiratory_system"]["asthma"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["asthma"],
-                        "extra_properties": {
-                            "comorbidities_group": "respiratory_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "copd" in obj["comorbidities"]["respiratory_system"]:
-                if obj["comorbidities"]["respiratory_system"]["copd"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["copd"],
-                        "extra_properties": {
-                            "comorbidities_group": "respiratory_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "cystic_fibrosis" in obj["comorbidities"]["respiratory_system"]:
-                if obj["comorbidities"]["respiratory_system"]["cystic_fibrosis"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["cystic_fibrosis"],
-                        "extra_properties": {
-                            "comorbidities_group": "respiratory_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "sleep_apnea" in obj["comorbidities"]["respiratory_system"]:
-                if obj["comorbidities"]["respiratory_system"]["sleep_apnea"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["sleep_apnea"],
-                        "extra_properties": {
-                            "comorbidities_group": "respiratory_system"
-                        }
-                    }
-                    diseases.append(disease)
-        if "genitourinary_metabolic" in obj["comorbidities"]:
-            if "renal_disease" in obj["comorbidities"]["genitourinary_metabolic"]:
-                if obj["comorbidities"]["genitourinary_metabolic"]["renal_disease"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["renal_disease"],
-                        "extra_properties": {
-                            "comorbidities_group": "genitourinary_metabolic"
-                        }
-                    }
-                    diseases.append(disease)
-        # Mapping Hypertension and congestive heart failure to PhenotypicFeature
-        if "cardiovascular_system" in obj["comorbidities"]:
-            if "congestive_heart_failure" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["congestive_heart_failure"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["congestive_heart_failure"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-            if "hypertension" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["hypertension"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["hypertension"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-            if "myocardial_infarction_type_one" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["myocardial_infarction_type_one"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["myocardial_infarction_type_one"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-            if "myocardial_infarction_type_two" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["myocardial_infarction_type_two"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["myocardial_infarction_type_two"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-            if "peripheral_vascular_disease" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["peripheral_vascular_disease"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["peripheral_vascular_disease"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-            # TODO make Stroke a disease ?
-            if "stroke" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["stroke"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["stroke"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    diseases.append(disease)
-            if "arrythmias" in obj["comorbidities"]["cardiovascular_system"]:
-                if obj["comorbidities"]["cardiovascular_system"]["arrythmias"] == "Yes":
-                    phenotypic_feature = {
-                        "type": ONTOLOGIES["comorbidities"]["arrythmias"],
-                        "extra_properties": {
-                            "comorbidities_group": "cardiovascular_system"
-                        }
-                    }
-                    phenotypic_features.append(phenotypic_feature)
-        if "neurological" in obj["comorbidities"]:
-            if "dementia" in obj["comorbidities"]["neurological"]:
-                if obj["comorbidities"]["neurological"]["dementia"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["dementia"],
-                        "extra_properties": {
-                            "comorbidities_group": "neurological"
-                        }
-                    }
-                    diseases.append(disease)
-        if "cancer" in obj["comorbidities"]:
-            if "leukemia" in obj["comorbidities"]["cancer"]:
-                if obj["comorbidities"]["cancer"]["leukemia"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["leukemia"],
-                        "extra_properties": {
-                            "comorbidities_group": "cancer"
-                        }
-                    }
-                    diseases.append(disease)
-            if "lymphoma" in obj["comorbidities"]["cancer"]:
-                if obj["comorbidities"]["cancer"]["lymphoma"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["lymphoma"],
-                        "extra_properties": {
-                            "comorbidities_group": "cancer"
-                        }
-                    }
-                    diseases.append(disease)
-            if "sarcoma" in obj["comorbidities"]["cancer"]:
-                if obj["comorbidities"]["cancer"]["sarcoma"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["sarcoma"],
-                        "extra_properties": {
-                            "comorbidities_group": "cancer"
-                        }
-                    }
-                    diseases.append(disease)
-            if "carcinoma" in obj["comorbidities"]["cancer"]:
-                if obj["comorbidities"]["cancer"]["carcinoma"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["carcinoma"],
-                        "extra_properties": {
-                            "comorbidities_group": "cancer"
-                        }
-                    }
-                    diseases.append(disease)
-            if "myeloma" in obj["comorbidities"]["cancer"]:
-                if obj["comorbidities"]["cancer"]["myeloma"] == "Yes":
-                    disease = {
-                        "term": ONTOLOGIES["comorbidities"]["myeloma"],
-                        "extra_properties": {
-                            "comorbidities_group": "cancer"
-                        }
-                    }
-                    diseases.append(disease)
-    # TODO
+        for system in ["immune_system", "respiratory_system", "genitourinary_metabolic", "cardiovascular_system",
+                       "neurological", "cancer"]:
+            if system in obj["comorbidities"]:
+                for comorbidity in ONTOLOGIES["comorbidities"][system].keys():
+                    disease = comorbidity_to_disease(obj["comorbidities"][system], comorbidity, system)
+                    if disease:
+                        diseases.append(disease)
+    # Symptoms
     if "symptoms_at_admission_longitudinal" in obj:
-        if "dry_cough" in obj["symptoms_at_admission_longitudinal"]:
-            symptom = {
-                "type": ONTOLOGIES["symptoms"]["dry_cough"],
-                "extra_properties": {
-                    "datatype": "symptoms"
-                }
-            }
-            if "Yes" in obj["symptoms_at_admission_longitudinal"]["dry_cough"]:
-                symptom["negated"] = False
-                symptom["description"] = obj["symptoms_at_admission_longitudinal"]["dry_cough"]
-            else:
-                symptom["negated"] = True
-                symptom["description"] = "The phenotype was looked for, but found to be absent."
-            phenotypic_features.append(symptom)
+        # yes no na symptoms
+        for pf in ["dry_cough", "mucus_cough", "difficulty_breathing", "fatigue", "myalgia",
+                   "runny_nose", "sore_throat", "nosebleed", "ear_pain", "wheezing",
+                   "chest_pain", "joint_pain", "headache", "seizures",
+                   "altered_consciousness_or_confusion", "abdominal_pain",
+                   "diarrhea", "nausea", "conjunctivitis", "skin_rash",
+                   "asymptomatic", "bodily_pain"]:
+            new_pf = symptom_to_pf(obj["symptoms_at_admission_longitudinal"], pf)
+            phenotypic_features.append(new_pf)
+        # symptoms with values
+        # TODO oxygen_saturation_on - not in ontologies
+        for value_pf in ["fever", "heart_rate", "highest_respiratory_rate",
+                         "systolic_blood_pressure", "diastolic_blood_pressure",
+                         "oxygen_saturation"]:
+            new_value_pf = symptom_to_pf(obj["symptoms_at_admission_longitudinal"], value_pf, True)
+            phenotypic_features.append(new_value_pf)
+
+        # TODO loss_of_taste_or_smell
+
     phenopacket["subject"] = subject
     phenopacket["diseases"] = diseases
     phenopacket["phenotypic_features"] = phenotypic_features
