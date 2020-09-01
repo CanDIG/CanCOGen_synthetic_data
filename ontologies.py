@@ -1,5 +1,50 @@
 # Mapping CRF data to Ontologies: SNOMED and HPO
 
+RESOURCES = {
+    "NCBITaxon": {
+        "name": "NCBI Taxonomy OBO Edition",
+        "version": "2018-07-27",
+        "namespace_prefix": "NCBITaxon",
+        "id": "NCBITaxon:2018-07-27",
+        "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+        "url": "http://purl.obolibrary.org/obo/ncbitaxon.owl"
+    },
+    "SNOMED": {
+        "name": "SNOMED Clinical Terms",
+        "version": "2019-04-11",
+        "namespace_prefix": "SNOMED",
+        "id": "SNOMED:2019-04-11",
+        "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+        "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+    },
+    "HP": {
+        "name": "The Human Phenotype Ontology",
+        "version": "2020-06-08",
+        "namespace_prefix": "HP",
+        "id": "HP:2020-06-08",
+        "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+        "url": "http://purl.obolibrary.org/obo/hp.owl"
+    },
+    "MP": {
+        "name": "Mammalian Phenotype Ontology",
+        "version": "2020-07-09",
+        "namespace_prefix": "MP",
+        "id": "MP:2020-07-09",
+        "iri_prefix": "http://purl.bioontology.org/ontology/MP/",
+        "url": "http://purl.obolibrary.org/obo/mp.owl"
+    },
+    "NCIT": {
+        "name": "National Cancer Institute Thesaurus",
+        "version": "2020-08-31",
+        "namespace_prefix": "NCIT",
+        "id": "NCIT:2020-08-31",
+        "iri_prefix": "http://purl.bioontology.org/ontology/NCIT/",
+        "url": "https://bioportal.bioontology.org/ontologies/NCIT"
+    }
+
+}
+
+
 ONTOLOGIES = {
     "comorbidities": {
         "hiv": {

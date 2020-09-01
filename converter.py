@@ -4,7 +4,7 @@ import os
 import getopt
 from sys import argv
 
-from ontologies import ONTOLOGIES
+from ontologies import ONTOLOGIES, RESOURCES
 
 DIR_FILES = os.path.dirname(os.path.realpath(__file__))
 
@@ -26,46 +26,11 @@ def convert_to_phenopacket(obj):
             "created_by": "Ksenia Zaytseva",
             "submitted_by": "Ksenia Zaytseva",
             "resources": [
-                {
-                    "name": "NCBI Taxonomy OBO Edition",
-                    "version": "2018-07-27",
-                    "namespace_prefix": "NCBITaxon",
-                    "id": "NCBITaxon:2018-07-27",
-                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
-                    "url": "http://purl.obolibrary.org/obo/ncbitaxon.owl"
-                },
-                {
-                    "name": "SNOMED Clinical Terms",
-                    "version": "2019-04-11",
-                    "namespace_prefix": "SNOMED",
-                    "id": "SNOMED:2019-04-11",
-                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
-                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
-                },
-                {
-                    "name": "The Human Phenotype Ontology",
-                    "version": "2020-06-08",
-                    "namespace_prefix": "HP",
-                    "id": "HP:2020-06-08",
-                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
-                    "url": "http://purl.obolibrary.org/obo/hp.owl"
-                },
-                {
-                    "name": "Mammalian Phenotype Ontology",
-                    "version": "2020-07-09",
-                    "namespace_prefix": "MP",
-                    "id": "MP:2020-07-09",
-                    "iri_prefix": "http://purl.bioontology.org/ontology/MP/",
-                    "url": "http://purl.obolibrary.org/obo/mp.owl"
-                },
-                {
-                    "name": "National Cancer Institute Thesaurus",
-                    "version": "2020-08-31",
-                    "namespace_prefix": "NCIT",
-                    "id": "NCIT:2020-08-31",
-                    "iri_prefix": "http://purl.bioontology.org/ontology/NCIT/",
-                    "url": "https://bioportal.bioontology.org/ontologies/NCIT"
-                }
+                RESOURCES["NCBITaxon"],
+                RESOURCES["SNOMED"],
+                RESOURCES["HP"],
+                RESOURCES["MP"],
+                RESOURCES["NCIT"],
             ]
         }
     }
