@@ -4,10 +4,11 @@ DATA_DICTIONARY = {
     "yes_no": [(0, "No"), (1, "Yes")],
     "yes_no_dontknow": [(0, "No"), (1, "Yes"), (-1, "Don't know")],
     "yes_no_na": [(0, "No"), (1, "Yes"), (-1, "NA")],
+    "yes_no_unknown": [(0, "No"), (1, "Yes"), (-1, "Unknown")],
     "yes_no_confirmed_probable": [(0, "No"), (1, "Yes, confirmed"), (2, "Yes, probable")],
     "demographics": {
-        "gender": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
-        "race_or_ethnicity": [
+        "sex": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
+        "ancestry": [
             (0, "White"),
             (1, "Black"),
             (2, "Hispanic"),
@@ -24,6 +25,15 @@ DATA_DICTIONARY = {
             (3, "Bachelor's degree/4 year college"),
             (4, "Master's degree or higher"),
             (-1, "Don't know")
+        ],
+        "employment": [
+            (0, "Unknown"),
+            (1, "Healthcare worker (excluding long-term health care provider)"),
+            (2, "Factory worker"),
+            (3, "Long-term care facility employee"),
+            (4, "Grocery store employee"),
+            (5, "Tourism/travel worker"),
+            (6, "Other")
         ]
     },
     "vital_status": {
@@ -57,17 +67,17 @@ DATA_DICTIONARY = {
     "comorbidities": {
         "immune_system": {
             "type_of_organ_transplant": [
-            (1, "Heart"),
-            (2, "Kidney"),
-            (3, "Liver"),
-            (4, "Pancreas"),
-            (5, "Intestine"),
-            (6, "Lung"),
-            (7, "Eye (Cornea)"),
-            (8, "Blood/bone marrow"),
-            (9, "Blood vessel"),
-            (10, "Other")
-        ]
+                (1, "Heart"),
+                (2, "Kidney"),
+                (3, "Liver"),
+                (4, "Pancreas"),
+                (5, "Intestine"),
+                (6, "Lung"),
+                (7, "Eye (Cornea)"),
+                (8, "Blood/bone marrow"),
+                (9, "Blood vessel"),
+                (10, "Other")
+            ]
         },
         "cancer": {
             "location": [
@@ -110,12 +120,17 @@ DATA_DICTIONARY = {
             (2, "Yes, with sputum production"),
             (3, "Yes, bloody sputum/haemoptysis")
         ],
-        "difficulty_or_pain_with_breathing": [
+        "difficulty_breathing": [
             (0, "No"),
             (1, "Yes, slight"),
             (2, "Yes, moderate"),
             (3, "Yes, severe"),
             (4, "Don't know")
+        ],
+        "oxygen_saturation_on": [
+            (1, "Room air"),
+            (2, "Oxygen therapy"),
+            (3, "N/A")
         ],
         "loss_of_taste_or_smell": [
             (0, "No"),
@@ -132,8 +147,34 @@ DATA_DICTIONARY = {
             (5, "Other (specify)")
         ]
     },
-    "hospitalization_information_encounter_complications": {
-        "repeat_hospital_visit_within_30_days": [(0, "No"), (1, "Yes"), (2, "Unknown")]
+    "complications": {
+        "acute_respiratory_distress_syndrome": [
+            (0, "No"),
+            (1, "Yes, Mild"),
+            (2, "Yes, Moderate"),
+            (3, "Yes, Severe"),
+            (4, "Yes, Unknown"),
+            (-1, "N/A")
+        ],
+        "cardiac_inflammation": [
+            (-1, "N/A"),
+            (0, "Endocarditis"),
+            (1, "Myocarditis"),
+            (2, "Pericarditis")
+        ],
+        "cardiac_arrhythmia": [
+            (-1, "N/A"),
+            (1, "AF"),
+            (2, "VT/VF"),
+            (3, "Other")
+        ],
+        "cardiac_ischaemia": [
+            (-1, "N/A"),
+            (1, "STEMI"),
+            (2, "NSTEMI"),
+            (3, "Cath"),
+            (4, "Stent")
+        ]
     },
     "pathogen_testing": {
         "was_other_pathogen_testing_done_during_this_illness_episode": [

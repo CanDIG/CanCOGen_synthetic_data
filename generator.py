@@ -36,11 +36,15 @@ def generate_cancogen_data():
         },
         "demographics": {
             "age": str(fake.date_of_birth(minimum_age=20, maximum_age=100)),
-            "gender": random_choice_cv("demographics", "gender"),
-            "race_or_ethnicity": random_choice_cv("demographics", "race_or_ethnicity"),
-            "height": str(random.randrange(150, 190)),
-            "weight": str(random.randrange(50, 190)),
-            "education": random_choice_cv("demographics", "education")
+            "sex": random_choice_cv("demographics", "sex"),
+            "ancestry": random_choice_cv("demographics", "ancestry"),
+            "country_of_birth": "",
+            "height": f"{str(random.randrange(150, 190))} cm",
+            "weight": f"{str(random.randrange(50, 190))} Kg",
+            "education": random_choice_cv("demographics", "education"),
+            "employment": random_choice_cv("demographics", "employment"),
+            "household": "",
+            "pregnancy_weeks": ""
         },
         "vital_status": {
             "ambulatory": random_choice_cv("vital_status", "ambulatory")
@@ -92,7 +96,7 @@ def generate_cancogen_data():
             },
             "cancer": {
                 "malignancy": random_choice_generic("yes_no_dontknow"),
-                "age_at_diagnosis_with_cancer": random_choice_generic("yes_no_dontknow"),
+                "age_at_diagnosis_with_cancer": "",
                 "leukemia": random_choice_generic("yes_no_dontknow"),
                 "lymphoma": random_choice_generic("yes_no_dontknow"),
                 "sarcoma": random_choice_generic("yes_no_dontknow"),
@@ -100,56 +104,90 @@ def generate_cancogen_data():
                 "myeloma": random_choice_generic("yes_no_dontknow"),
                 "mixed_types": random_choice_generic("yes_no_dontknow"),
                 "location": "",
-                "cancer_treatment_in_last_twelve_months": []
+                "cancer_treatment_in_last_twelve_months": ""
             }
         },
         "symptoms_at_admission_longitudinal": {
-            "asymptomatic": random_choice_generic("yes_no"),
             "dry_cough": random_choice_cv("symptoms_at_admission_longitudinal", "dry_cough"),
             "mucus_cough": random_choice_cv("symptoms_at_admission_longitudinal", "mucus_cough"),
-            "difficulty_or_pain_with_breathing": random_choice_cv("symptoms_at_admission_longitudinal",
-                                                                  "difficulty_or_pain_with_breathing"),
-            "wheezing": random_choice_generic("yes_no_dontknow"),
-            "days_with_fever": random.randrange(0, 7),
+            "days_with_cough": "",
+            "difficulty_breathing": random_choice_cv("symptoms_at_admission_longitudinal",
+                                                     "difficulty_breathing"),
+            "fever": f"Temperature {str(round(random.uniform(36.4, 39.5), 1))} C",
+            # TODO check
+            "days_with_fever": random.choice([f"{str(random.randrange(0, 7))} days", "Don't know"]),
+            "heart_rate": f"{str(random.randrange(60, 100))} beats per minute",
+            "highest_respiratory_rate": f"{str(random.randrange(10, 20))} breaths per minute",
+            "systolic_blood_pressure": f"{str(random.randrange(90, 120, 10))} mmHg",
+            "diastolic_blood_pressure": f"{str(random.randrange(60, 80, 10))} mmHg",
+            "oxygen_saturation": f"{str(random.randrange(90, 100))} %",
+            "oxygen_saturation_on": random_choice_cv("symptoms_at_admission_longitudinal",
+                                                     "oxygen_saturation_on"),
             "fatigue": random_choice_generic("yes_no_dontknow"),
-            "chest_pain": random_choice_generic("yes_no_dontknow"),
-            "ear_pain": random_choice_generic("yes_no_dontknow"),
-            "joint_pain": random_choice_generic("yes_no_dontknow"),
-            "abdominal_pain": random_choice_generic("yes_no_dontknow"),
+            "myalgia": random_choice_generic("yes_no_dontknow"),
             "runny_nose": random_choice_generic("yes_no_dontknow"),
-            "nosebleed": random_choice_generic("yes_no_dontknow"),
             "sore_throat": random_choice_generic("yes_no_dontknow"),
             "loss_of_taste_or_smell": random_choice_cv("symptoms_at_admission_longitudinal", "loss_of_taste_or_smell"),
+            "nosebleed": random_choice_generic("yes_no_dontknow"),
+            "ear_pain": random_choice_generic("yes_no_dontknow"),
+            "wheezing": random_choice_generic("yes_no_dontknow"),
+            "chest_pain": random_choice_generic("yes_no_dontknow"),
+            "joint_pain": random_choice_generic("yes_no_dontknow"),
+            "headache": random_choice_generic("yes_no_dontknow"),
+            "seizures": random_choice_generic("yes_no_dontknow"),
+            "altered_consciousness_or_confusion": random_choice_generic("yes_no_dontknow"),
+            "abdominal_pain": random_choice_generic("yes_no_dontknow"),
             "diarrhea": random_choice_generic("yes_no_dontknow"),
             "nausea": random_choice_generic("yes_no_dontknow"),
-            "headache": random_choice_generic("yes_no_dontknow"),
-            "bodily_pain": random_choice_generic("yes_no_dontknow"),
-            "irritability_or_confusion": random_choice_generic("yes_no_dontknow"),
+            "conjunctivitis": random_choice_generic("yes_no_dontknow"),
             "skin_rash": random_choice_generic("yes_no_dontknow"),
+            "asymptomatic": random_choice_generic("yes_no"),
+            "bodily_pain": random_choice_generic("yes_no_dontknow"),
             "home_medications": random_choice_cv("symptoms_at_admission_longitudinal", "home_medications"),
-            "has_patient_received_bcg_vaccine": random_choice_generic("yes_no_dontknow")
+            "has_patient_received_bcg_vaccine": random_choice_generic("yes_no_dontknow"),
+
         },
-        "hospitalization_information_encounter_complications": {
-            "hospitalization": {
-                "repeat_hospital_visit_within_30_days": random_choice_generic("yes_no_na"),
-                "ct_chest": random_choice_generic("yes_no"),
-                "chest_x_ray": random_choice_generic("yes_no"),
-                "lung_infilatrates": random_choice_generic("yes_no"),
-                "ecg": random_choice_generic("yes_no"),
-                "echocardiogram": random_choice_generic("yes_no"),
-                "pocus": random_choice_generic("yes_no"),
-                "inhaled_no2": random_choice_generic("yes_no_na"),
-                "viral_pneumonitis": random_choice_generic("yes_no"),
-                "pneumonia": random_choice_generic("yes_no"),
-                "cryptogenic_organizing_pneumonia": random_choice_generic("yes_no_na"),
-                "bronchiolitis": random_choice_generic("yes_no_na"),
-                "pneumothorax": random_choice_generic("yes_no_na"),
-                "tracheostomy_inserted": random_choice_generic("yes_no_na"),
-                "pancreatitis": random_choice_generic("yes_no_na"),
-                "plearal_effusion": random_choice_generic("yes_no_na"),
-                "renal_replacement_therapy_or_dialysis": random_choice_generic("yes_no_na"),
-                "liver_dysfunction": random_choice_generic("yes_no_na")
-            }
+        "complications": {
+            "viral_pneumonitis": random_choice_generic("yes_no_na"),
+            "bacterial_pneumonia": random_choice_generic("yes_no_na"),
+            "acute_respiratory_distress_syndrome": random_choice_cv("complications",
+                                                                    "acute_respiratory_distress_syndrome"),
+            "pneumothorax": random_choice_generic("yes_no_na"),
+            "pleural_effusion": random_choice_generic("yes_no_na"),
+            "cryptogenic_organizing_pneumonia": random_choice_generic("yes_no_na"),
+            "bronchiolitis": random_choice_generic("yes_no_na"),
+            "meningitis": random_choice_generic("yes_no_na"),
+            "encephalitis": random_choice_generic("yes_no_na"),
+            "seizure": random_choice_generic("yes_no_na"),
+            "stroke_cerebrovascular_accident": random_choice_generic("yes_no_na"),
+            "congestive_heart_failure": random_choice_generic("yes_no_na"),
+            "cardiac_inflammation": random_choice_cv("complications", "cardiac_inflammation"),
+            "cardiac_arrhythmia": random_choice_cv("complications", "cardiac_arrhythmia"),
+            "cardiac_ischaemia": random_choice_cv("complications", "cardiac_ischaemia"),
+            "cardiac_arrest": random_choice_generic("yes_no_unknown"),
+            "coagulation_disorder": random_choice_generic("yes_no_unknown"),
+            "disseminated_intravascular_coagination": random_choice_generic("yes_no_unknown"),
+            "anemia": random_choice_generic("yes_no_unknown"),
+            "rhabdomyolysis": random_choice_generic("yes_no_unknown"),
+            "myositis": random_choice_generic("yes_no_unknown"),
+            "acute_renal_injury": random_choice_generic("yes_no_unknown"),
+            "gastrointestinal_haemorrhage": random_choice_generic("yes_no_unknown"),
+            "pancreatitis": random_choice_generic("yes_no_unknown"),
+            "liver_dysfunction": random_choice_generic("yes_no_unknown"),
+            "hyperglycemia": random_choice_generic("yes_no_unknown"),
+            "hypoglycemia": random_choice_generic("yes_no_unknown"),
+            "inflammatory_syndrome": random_choice_generic("yes_no_unknown"),
+            "ecg": random_choice_generic("yes_no"),
+            "echocardiogram": random_choice_generic("yes_no"),
+            "pocus": random_choice_generic("yes_no"),
+            # TODO CHECK these fields are not in CRF but in Overview doc
+            "repeat_hospital_visit_within_30_days": random_choice_generic("yes_no_na"),
+            "ct_chest": random_choice_generic("yes_no"),
+            "chest_x_ray": random_choice_generic("yes_no"),
+            "lung_infilatrates": random_choice_generic("yes_no"),
+            "inhaled_no2": random_choice_generic("yes_no_na"),
+            "tracheostomy_inserted": random_choice_generic("yes_no_na"),
+            "renal_replacement_therapy_or_dialysis": random_choice_generic("yes_no_na")
         },
         "pathogen_testing": {
             "was_other_pathogen_testing_done_during_this_illness_episode":
@@ -201,6 +239,11 @@ def generate_cancogen_data():
         data["comorbidities"]["immune_system"]["type_of_organ_transplant"] = random.choice(
             DATA_DICTIONARY["comorbidities"]["immune_system"]["type_of_organ_transplant"]
         )[1]
+    # if malignancy is No, set all cancer diseases to No
+    if data["comorbidities"]["cancer"]["malignancy"] == "No":
+        for c in ["leukemia", "lymphoma", "sarcoma", "carcinoma", "myeloma", "mixed_types"]:
+            data["comorbidities"]["cancer"][c] = "No"
+
     # add type of bacteria location only if bacteria answer is Yes confirmed
     if data["pathogen_testing"]["bacteria"] != "No":
         data["pathogen_testing"]["bacteria_location"] = random_choice_cv("pathogen_testing", "bacteria_location")
