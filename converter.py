@@ -23,10 +23,7 @@ def symptom_to_pf(obj, symptom, contains_value=False):
                 "datatype": "symptom"
             }
         }
-        if "Yes" in obj[symptom]:
-            pf["negated"] = False
-            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF."
-        elif contains_value:
+        if "Yes" in obj[symptom] or contains_value:
             pf["negated"] = False
             pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF."
         else:
