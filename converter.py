@@ -33,6 +33,26 @@ def symptom_to_pf(obj, symptom, contains_value=False):
         return pf
 
 
+#TODO
+def complication_to_pf(obj, complication, contains_value=False):
+    if complication in obj:
+        pf = {
+            "type": ONTOLOGIES["complications"][complication],
+            "extra_properties": {
+                "datatype": "complication"
+            }
+        }
+        if "Yes" in obj[complication] or contains_value:
+            pf["negated"] = False
+            pf["description"] = f"{obj[complication]} - Original value extracted from the source CRF."
+
+        else:
+            pf["negated"] = True
+            pf["description"] = f"{obj[complication]} - Original value extracted from the source CRF." \
+                                f"The phenotype was looked for, but found to be absent."
+        return pf
+
+
 def comorbidity_to_disease(obj, comorbidity, comorbidities_group):
     if comorbidity in obj:
         if obj[comorbidity] == "Yes":
@@ -157,6 +177,30 @@ def convert_to_phenopacket(obj):
                     loss_to_pf("loss_of_smell", loss_of_taste_or_smell, True),
                     loss_to_pf("loss_of_taste", loss_of_taste_or_smell, True)
                 ])
+
+    # Complications
+    if "complications" in obj:
+        # yes no dont know complications
+        for pf in ["viral_pneumonitis", "bacterial_pneumonia", "pneumothorax",
+                   "pleural_effusion", "cryptogenic_organizing_pneumonia",
+                   "bronchiolitis", "meningitis", "encephalitis", "seizure",
+                   "stroke_cerebrovascular_accident", "congestive_heart_failure",
+                   "cardiac_arrest", "coagulation_disorder",
+                   "disseminated_intravascular_coagination",
+                   "anemia", "rhabdomyolysis", "myositis",
+                   "acute_renal_injury", "gastrointestinal_haemorrhage",
+                   "pancreatitis", "liver_dysfunction", "hyperglycemia",
+                   "hypoglycemia", "inflammatory_syndrome"]:
+            new_pf = complication_to_pf(obj["complications"], pf)
+            phenotypic_features.append(new_pf)
+        # complications with values
+        phenotypic_features.append(complication_to_pf(
+            obj["complications"],"acute_respiratory_distress_syndrome", False)
+        )
+        # for value_pf in ["acute_respiratory_distress_syndrome", "cardiac_inflammation",
+        #                  "cardiac_arrhythmia", "cardiac_ischaemia"]:
+        #     new_value_pf = complication_to_pf(obj["complications"], value_pf, True)
+        #     phenotypic_features.append(new_value_pf)
 
     phenopacket["subject"] = subject
     phenopacket["diseases"] = diseases
