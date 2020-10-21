@@ -15,20 +15,29 @@ SEX_TO_SEX_MAPPING = {
 }
 
 
-def symptom_to_pf(obj, symptom, contains_value=False):
-    if symptom in obj:
+def phenotype_to_pf(obj, phenotype: str, ontology_dict: str, datatype: str, contains_value=False):
+    """
+    Converts a phenotype from CRF to the Phenopackets phenotypic feature
+    :param obj: crf json
+    :param phenotype: phenotype from CRF (e.g. symptoms at admission, complications)
+    :param ontology_dict: phenotype group from ontologies
+    :param datatype: phenotype datatype (e.g. symptom, complication)
+    :param contains_value: flags when the value is a free text, defaults to False
+    :return: Phenopackets Phenotypic Feature object
+    """
+    if phenotype in obj:
         pf = {
-            "type": ONTOLOGIES["symptoms"][symptom],
+            "type": ONTOLOGIES[ontology_dict][phenotype],
             "extra_properties": {
-                "datatype": "symptom"
+                "datatype": datatype
             }
         }
-        if "Yes" in obj[symptom] or contains_value:
+        if "Yes" in obj[phenotype] or (contains_value and not any(x in obj[phenotype] for x in ["No", "N/A"])):
             pf["negated"] = False
-            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF."
+            pf["description"] = f"{obj[phenotype]} - Original value extracted from the source CRF."
         else:
             pf["negated"] = True
-            pf["description"] = f"{obj[symptom]} - Original value extracted from the source CRF." \
+            pf["description"] = f"{obj[phenotype]} - Original value extracted from the source CRF." \
                                 f"The phenotype was looked for, but found to be absent."
         return pf
 
@@ -123,14 +132,15 @@ def convert_to_phenopacket(obj):
                    "altered_consciousness_or_confusion", "abdominal_pain",
                    "diarrhea", "nausea", "conjunctivitis", "skin_rash",
                    "asymptomatic", "bodily_pain"]:
-            new_pf = symptom_to_pf(obj["symptoms_at_admission_longitudinal"], pf)
+            new_pf = phenotype_to_pf(obj["symptoms_at_admission_longitudinal"],  pf, "symptoms", "symptom")
             phenotypic_features.append(new_pf)
         # symptoms with values
         # TODO oxygen_saturation_on - not in ontologies
         for value_pf in ["fever", "heart_rate", "highest_respiratory_rate",
                          "systolic_blood_pressure", "diastolic_blood_pressure",
                          "oxygen_saturation"]:
-            new_value_pf = symptom_to_pf(obj["symptoms_at_admission_longitudinal"], value_pf, True)
+            new_value_pf = phenotype_to_pf(obj["symptoms_at_admission_longitudinal"],
+                                           value_pf, "symptoms", "symptom", True)
             phenotypic_features.append(new_value_pf)
 
         # TODO loss_of_taste_or_smell
@@ -157,6 +167,28 @@ def convert_to_phenopacket(obj):
                     loss_to_pf("loss_of_smell", loss_of_taste_or_smell, True),
                     loss_to_pf("loss_of_taste", loss_of_taste_or_smell, True)
                 ])
+    # Complications
+    if "complications" in obj:
+        # yes no dont know complications
+        for pf in ["viral_pneumonitis", "bacterial_pneumonia", "pneumothorax",
+                   "pleural_effusion", "cryptogenic_organizing_pneumonia",
+                   "bronchiolitis", "meningitis", "encephalitis", "seizure",
+                   "stroke_cerebrovascular_accident", "congestive_heart_failure",
+                   "cardiac_arrest", "coagulation_disorder",
+                   "disseminated_intravascular_coagination",
+                   "anemia", "rhabdomyolysis", "myositis",
+                   "acute_renal_injury", "gastrointestinal_haemorrhage",
+                   "pancreatitis", "liver_dysfunction", "hyperglycemia",
+                   "hypoglycemia", "inflammatory_syndrome"]:
+            new_pf = phenotype_to_pf(obj["complications"], pf, "complications", "complication")
+            phenotypic_features.append(new_pf)
+        # complications with values
+        phenotypic_features.append(phenotype_to_pf(
+            obj["complications"],"acute_respiratory_distress_syndrome", "complications", "complication")
+        )
+        for value_pf in ["cardiac_inflammation", "cardiac_arrhythmia", "cardiac_ischaemia"]:
+            new_value_pf = phenotype_to_pf(obj["complications"], value_pf, "complications", "complication", True)
+            phenotypic_features.append(new_value_pf)
 
     phenopacket["subject"] = subject
     phenopacket["diseases"] = diseases
