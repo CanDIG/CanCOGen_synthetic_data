@@ -2,14 +2,14 @@ import random
 import json
 import getopt
 from sys import argv
+import datetime
 from faker import Faker
+from pycountry import countries
 
 from data_dictionary import DATA_DICTIONARY
 
-
 fake = Faker()
 Faker.seed(42)
-
 
 HOSPITAL_NAME_WORDS = ["University", "Central", "Northwestern", "Central South", "Main", "General"]
 
@@ -30,21 +30,35 @@ def generate_cancogen_data():
     """ Generates random choices from DATA_DICTIONARY using uniform distribution. """
 
     data = {
+        "study_eligibility": {
+            # uniform distribution since no more context available
+            "covid19_test": random_choice_generic("negative_positive")
+        },
         "identification": {
-            "institution_location": str(random.choice(HOSPITAL_NAME_WORDS)) + " Hospital",
             "case_id": fake.ssn()
         },
         "demographics": {
-            "age": str(fake.date_of_birth(minimum_age=20, maximum_age=100)),
+            "host_hospital": str(random.choice(HOSPITAL_NAME_WORDS)) + " Hospital",
+            "enrollment_date": str(fake.date_between_dates(
+                date_start=datetime.datetime(2020, 5, 1), date_end=datetime.datetime(2020, 10, 21))),
+            # prior distribution
+            "birth_country": random.choices(
+                [countries.get(name="Canada").name,
+                 random.choice(list(countries)).name],
+                [0.9, 0.1], k=1
+            )[0],
+            "residence_type": random_choice_cv("demographics", "residence_type"),
+            "household": random.choice(list(range(1, 6))),
+            "date_of_birth": str(fake.date_of_birth(minimum_age=18, maximum_age=100)),
             "sex": random_choice_cv("demographics", "sex"),
             "ancestry": random_choice_cv("demographics", "ancestry"),
-            "country_of_birth": "",
             "height": f"{str(random.randrange(150, 190))} cm",
             "weight": f"{str(random.randrange(50, 190))} Kg",
             "education": random_choice_cv("demographics", "education"),
-            "employment": random_choice_cv("demographics", "employment"),
-            "household": "",
-            "pregnancy_weeks": ""
+            "employment": random_choice_cv("demographics", "employment")
+        },
+        "patient_state": {
+            "hospitalized": random_choice_generic("yes_no")
         },
         "vital_status": {
             "ambulatory": random_choice_cv("vital_status", "ambulatory")
@@ -107,6 +121,12 @@ def generate_cancogen_data():
                 "cancer_treatment_in_last_twelve_months": ""
             }
         },
+        "at_admission": {
+            "covid19_test_date": str(fake.date_between_dates(
+                date_start=datetime.datetime(2020, 1, 1), date_end=datetime.datetime(2020, 10, 21))),
+            # below add diagnosis date which is after test date
+            "abo_type": random_choice_cv("at_admission", "abo_type"),
+        },
         "symptoms_at_admission_longitudinal": {
             "dry_cough": random_choice_cv("symptoms_at_admission_longitudinal", "dry_cough"),
             "mucus_cough": random_choice_cv("symptoms_at_admission_longitudinal", "mucus_cough"),
@@ -141,7 +161,7 @@ def generate_cancogen_data():
             "nausea": random_choice_generic("yes_no_dontknow"),
             "conjunctivitis": random_choice_generic("yes_no_dontknow"),
             "skin_rash": random_choice_generic("yes_no_dontknow"),
-            "asymptomatic": random_choice_generic("yes_no"),
+            "asymptomatic": random_choice_generic("yes_no_dontknow"),
             "bodily_pain": random_choice_generic("yes_no_dontknow"),
             "home_medications": random_choice_cv("symptoms_at_admission_longitudinal", "home_medications"),
             "has_patient_received_bcg_vaccine": random_choice_generic("yes_no_dontknow"),
@@ -248,6 +268,27 @@ def generate_cancogen_data():
     if data["pathogen_testing"]["bacteria"] != "No":
         data["pathogen_testing"]["bacteria_location"] = random_choice_cv("pathogen_testing", "bacteria_location")
 
+    if data["at_admission"]["covid19_test_date"]:
+        # convert string back to date object
+        covid19_test_date = datetime.datetime.fromisoformat(data["at_admission"]["covid19_test_date"])
+        # add range of 12 days for getting the diagnosis
+        possible_diagnosis_date = covid19_test_date + datetime.timedelta(days=12)
+        data["at_admission"]["covid19_diagnosis_date"] = str(fake.date_between_dates(
+            date_start=covid19_test_date, date_end=possible_diagnosis_date))
+
+    if data["demographics"]["sex"] == "Female" or data["demographics"]["sex"] == 1:
+        date_of_birth = datetime.datetime.fromisoformat(data["demographics"]["date_of_birth"])
+        date_after = datetime.datetime(1975, 1, 1)
+        date_before = datetime.datetime(2001, 1, 1)
+        if date_after < date_of_birth < date_before:
+            data["demographics"]["pregnancy"] = random.choices(["Yes", "No"], [0.1, 0.9], k=1)[0]
+        else:
+            data["demographics"]["pregnancy"] = "No"
+
+    if "pregnancy" in data["demographics"]:
+        if data["demographics"]["pregnancy"] == "Yes":
+            data["demographics"]["pregnancy_weeks"] = random.choice(range(1, 41))
+
     return data
 
 
@@ -261,7 +302,6 @@ def generate_bundle(number_of_patients: int, filename: str):
 
 
 def main(argv):
-
     opts, args = getopt.getopt(argv, "", ["number_of_patients=", "filename="])
     number_of_patients = 100
     filename = 'output'

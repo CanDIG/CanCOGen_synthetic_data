@@ -6,7 +6,9 @@ DATA_DICTIONARY = {
     "yes_no_na": [(0, "No"), (1, "Yes"), (-1, "NA")],
     "yes_no_unknown": [(0, "No"), (1, "Yes"), (-1, "Unknown")],
     "yes_no_confirmed_probable": [(0, "No"), (1, "Yes, confirmed"), (2, "Yes, probable")],
+    "negative_positive": [(0, "Negative"), (1, "Positive")],
     "demographics": {
+        "residence_type": [(1, "Personal residence"), (2, "Long term care facility"), (3, "Another institution")],
         "sex": [(0, "Male"), (1, "Female"), (2, "Not Specified")],
         "ancestry": [
             (0, "White"),
@@ -106,6 +108,15 @@ DATA_DICTIONARY = {
                 (-1, "Don't know")
             ]
         }
+    },
+    "at_admission": {
+        "abo_type": [
+            ("A", "A"),
+            ("B", "B"),
+            ("AB", "AB"),
+            ("O", "O"),
+            (-1, "Don't know"),
+        ]
     },
     "symptoms_at_admission_longitudinal": {
         "dry_cough": [
