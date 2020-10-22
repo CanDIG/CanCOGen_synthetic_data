@@ -104,16 +104,35 @@ def convert_to_phenopacket(obj):
     phenotypic_features = []
     # Demographics
     if "demographics" in obj:
-        subject["date_of_birth"] = obj["demographics"].get("age", None)
+        subject["date_of_birth"] = obj["demographics"].get("date_of_birth", None)
         sex = obj["demographics"].get("sex", None)
         if sex:
             subject["sex"] = SEX_TO_SEX_MAPPING[sex]
         subject["ethnicity"] = obj["demographics"].get("ancestry", None)
         subject["extra_properties"] = {
+            "host_hospital": obj["demographics"].get("host_hospital", None),
+            "enrollment_date": obj["demographics"].get("enrollment_date", None),
+            "birth_country": obj["demographics"].get("birth_country", None),
+            "residence_type": obj["demographics"].get("residence_type", None),
+            "household": obj["demographics"].get("household", None),
             "height": obj["demographics"].get("height", None),
             "weight": obj["demographics"].get("weight", None),
-            "education": obj["demographics"].get("education", None)
+            "education": obj["demographics"].get("education", None),
+            "employment": obj["demographics"].get("employment", None)
         }
+        if "pregnancy" in obj["demographics"]:
+            subject["extra_properties"]["pregnancy"] = obj["demographics"]["pregnancy"]
+        if "pregnancy_weeks" in obj["demographics"]:
+            subject["extra_properties"]["pregnancy_weeks"] = obj["demographics"]["pregnancy_weeks"]
+
+    if "study_eligibility" in obj:
+        subject["extra_properties"]["covid19_test"] = obj["study_eligibility"].get("covid19_test", None)
+    if "patient_state" in obj:
+        subject["extra_properties"]["hospitalized"] = obj["patient_state"].get("hospitalized", None)
+    if "at_admission" in obj:
+        subject["extra_properties"]["covid19_test_date"] = obj["at_admission"].get("covid19_test_date", None)
+        subject["extra_properties"]["covid19_diagnosis_date"] = obj["at_admission"].get("covid19_diagnosis_date", None)
+        subject["extra_properties"]["abo_type"] = obj["at_admission"].get("abo_type", None)
     # Comorbidities
     if "comorbidities" in obj:
         for system in ["immune_system", "respiratory_system", "genitourinary_metabolic", "cardiovascular_system",
@@ -131,7 +150,7 @@ def convert_to_phenopacket(obj):
                    "chest_pain", "joint_pain", "headache", "seizures",
                    "altered_consciousness_or_confusion", "abdominal_pain",
                    "diarrhea", "nausea", "conjunctivitis", "skin_rash",
-                   "asymptomatic", "bodily_pain"]:
+                   "bodily_pain"]:
             new_pf = phenotype_to_pf(obj["symptoms_at_admission_longitudinal"],  pf, "symptoms", "symptom")
             phenotypic_features.append(new_pf)
         # symptoms with values
@@ -167,6 +186,9 @@ def convert_to_phenopacket(obj):
                     loss_to_pf("loss_of_smell", loss_of_taste_or_smell, True),
                     loss_to_pf("loss_of_taste", loss_of_taste_or_smell, True)
                 ])
+        if "asymptomatic" in obj["symptoms_at_admission_longitudinal"]:
+            subject["extra_properties"]["asymptomatic"] = obj["symptoms_at_admission_longitudinal"]["asymptomatic"]
+
     # Complications
     if "complications" in obj:
         # yes no dont know complications

@@ -4,6 +4,7 @@ import getopt
 from sys import argv
 import datetime
 from faker import Faker
+from pycountry import countries
 
 from data_dictionary import DATA_DICTIONARY
 
@@ -39,20 +40,22 @@ def generate_cancogen_data():
         "demographics": {
             "host_hospital": str(random.choice(HOSPITAL_NAME_WORDS)) + " Hospital",
             "enrollment_date": str(fake.date_between_dates(
-                date_start=datetime.datetime(2020, 1, 1), date_end=datetime.datetime(2020, 10, 21))),
-            "birth_country": "",
+                date_start=datetime.datetime(2020, 5, 1), date_end=datetime.datetime(2020, 10, 21))),
+            # prior distribution
+            "birth_country": random.choices(
+                [countries.get(name="Canada").name,
+                 random.choice(list(countries)).name],
+                [0.9, 0.1], k=1
+            )[0],
             "residence_type": random_choice_cv("demographics", "residence_type"),
             "household": random.choice(list(range(1, 6))),
-            "age": str(fake.date_of_birth(minimum_age=18, maximum_age=100)),
+            "date_of_birth": str(fake.date_of_birth(minimum_age=18, maximum_age=100)),
             "sex": random_choice_cv("demographics", "sex"),
             "ancestry": random_choice_cv("demographics", "ancestry"),
-            "country_of_birth": "",
             "height": f"{str(random.randrange(150, 190))} cm",
             "weight": f"{str(random.randrange(50, 190))} Kg",
             "education": random_choice_cv("demographics", "education"),
-            "employment": random_choice_cv("demographics", "employment"),
-            "pregnancy": "no",
-            "pregnancy_weeks": ""
+            "employment": random_choice_cv("demographics", "employment")
         },
         "patient_state": {
             "hospitalized": random_choice_generic("yes_no")
@@ -272,6 +275,19 @@ def generate_cancogen_data():
         possible_diagnosis_date = covid19_test_date + datetime.timedelta(days=12)
         data["at_admission"]["covid19_diagnosis_date"] = str(fake.date_between_dates(
             date_start=covid19_test_date, date_end=possible_diagnosis_date))
+
+    if data["demographics"]["sex"] == "Female" or data["demographics"]["sex"] == 1:
+        date_of_birth = datetime.datetime.fromisoformat(data["demographics"]["date_of_birth"])
+        date_after = datetime.datetime(1975, 1, 1)
+        date_before = datetime.datetime(2001, 1, 1)
+        if date_after < date_of_birth < date_before:
+            data["demographics"]["pregnancy"] = random.choices(["Yes", "No"], [0.1, 0.9], k=1)[0]
+        else:
+            data["demographics"]["pregnancy"] = "No"
+
+    if "pregnancy" in data["demographics"]:
+        if data["demographics"]["pregnancy"] == "Yes":
+            data["demographics"]["pregnancy_weeks"] = random.choice(range(1, 41))
 
     return data
 
