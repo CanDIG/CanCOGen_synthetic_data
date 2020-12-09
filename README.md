@@ -4,6 +4,14 @@ The scripts generate random data using uniform distribution therefore the data c
 
 The CRF json is based on CanCOGen CRF excel.
 
+**Requirements:**
+
+Python 3.7
+
+To install dependencies run:
+
+<pre>pip install -r requirements.txt</pre>
+
 **Usage:**
 
 - Generate a list of CanCOGen CRFs in json:
